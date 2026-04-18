@@ -56,6 +56,11 @@
   type: string
   allowedValues: ["on", "off"]
   envVar: "AZD_ALPHA_ENABLE_LANGUAGE_CUSTOM"
+- key: alpha.appservice.container
+  description: "Enables Web App for Containers (single-container) deployment via host: appservice with a container image."
+  type: string
+  allowedValues: ["on", "off"]
+  envVar: "AZD_ALPHA_ENABLE_APPSERVICE_CONTAINER"
 - key: template.sources
   description: "Custom template sources for azd template list and azd init."
   type: object

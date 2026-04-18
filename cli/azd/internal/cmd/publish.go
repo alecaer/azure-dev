@@ -386,8 +386,10 @@ func (pa *PublishAction) Run(ctx context.Context) (*actions.ActionResult, error)
 
 // supportsPublish checks if the service host supports publishing.
 func (pa *PublishAction) supportsPublish(ctx context.Context, serviceConfig *project.ServiceConfig) bool {
-	// Built-in container targets support publish
-	if serviceConfig.Host.RequiresContainer() {
+	// Built-in container targets support publish. ServiceConfig.RequiresContainer()
+	// (rather than the kind-level helper) covers host: appservice in container mode
+	// (Web App for Containers) in addition to Container Apps and AKS.
+	if serviceConfig.RequiresContainer() {
 		return true
 	}
 

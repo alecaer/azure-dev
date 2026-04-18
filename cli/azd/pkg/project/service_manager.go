@@ -670,7 +670,8 @@ func (sm *serviceManager) GetFrameworkService(ctx context.Context, serviceConfig
 	var frameworkService FrameworkService
 
 	// Publishing from an existing image currently follows the same lifecycle as a docker project
-	if serviceConfig.Language == ServiceLanguageNone && !serviceConfig.Image.Empty() {
+	if serviceConfig.Language == ServiceLanguageNone &&
+		(!serviceConfig.Image.Empty() || !serviceConfig.Docker.Image.Empty()) {
 		serviceConfig.Language = ServiceLanguageDocker
 	}
 
@@ -698,9 +699,10 @@ func (sm *serviceManager) GetFrameworkService(ctx context.Context, serviceConfig
 
 	var compositeFramework CompositeFrameworkService
 	// For hosts which run in containers, if the source project is not already a container, we need to wrap it in a docker
-	// project that handles the containerization.
+	// project that handles the containerization. We use ServiceConfig.RequiresContainer() rather than the kind-level
+	// helper so Web App for Containers (host: appservice with image/docker.image/language:docker) is also wrapped.
 	requiresLanguage := serviceConfig.Language != ServiceLanguageDocker && serviceConfig.Language != ServiceLanguageNone
-	if serviceConfig.Host.RequiresContainer() && requiresLanguage {
+	if serviceConfig.RequiresContainer() && requiresLanguage {
 		if err := sm.serviceLocator.ResolveNamed(string(ServiceLanguageDocker), &compositeFramework); err != nil {
 			return nil, fmt.Errorf(
 				"failed resolving composite framework service for '%s', language '%s': %w",

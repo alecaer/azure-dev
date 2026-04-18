@@ -15,18 +15,18 @@ import (
 
 func Test_NewAppServiceTarget_Coverage3(t *testing.T) {
 	env := environment.NewWithValues("test-env", nil)
-	target := NewAppServiceTarget(env, nil, nil)
+	target := NewAppServiceTarget(env, nil, nil, nil, nil, nil)
 	require.NotNil(t, target)
 }
 
 func Test_appServiceTarget_RequiredExternalTools_Coverage3(t *testing.T) {
-	target := NewAppServiceTarget(nil, nil, nil)
+	target := NewAppServiceTarget(nil, nil, nil, nil, nil, nil)
 	result := target.RequiredExternalTools(t.Context(), nil)
 	assert.Empty(t, result)
 }
 
 func Test_appServiceTarget_Initialize_Coverage3(t *testing.T) {
-	target := NewAppServiceTarget(nil, nil, nil)
+	target := NewAppServiceTarget(nil, nil, nil, nil, nil, nil)
 	err := target.Initialize(t.Context(), nil)
 	require.NoError(t, err)
 }

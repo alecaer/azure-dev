@@ -381,10 +381,33 @@
                         }
                     },
                     {
+                        "comment": "AppService host - supports zip (code) or container deployment. When container mode is used (image, docker.image, or language: docker), docker config is permitted.",
+                        "if": {
+                            "properties": {
+                                "host": { "const": "appservice" }
+                            }
+                        },
+                        "then": {
+                            "anyOf": [
+                                {
+                                    "required": ["image"],
+                                    "not": { "required": ["project"] }
+                                },
+                                {
+                                    "required": ["project"]
+                                }
+                            ],
+                            "properties": {
+                                "k8s": false,
+                                "apiVersion": false
+                            }
+                        }
+                    },
+                    {
                         "comment": "Traditional hosts - require project only, disable container-specific properties",
                         "if": {
                             "properties": {
-                                "host": { "enum": ["appservice", "function", "springapp", "staticwebapp"] }
+                                "host": { "enum": ["function", "springapp", "staticwebapp"] }
                             }
                         },
                         "then": {
